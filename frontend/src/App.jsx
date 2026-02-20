@@ -15,6 +15,7 @@ function App() {
   const [padding, setPadding] = useState(null);
   const [images, setImages] = useState([]);
   const [spritesheetURL, setSpritesheetURL] = useState(null);
+  const [baseSpritesheet, setBaseSpritesheet] = useState(null);
   const [theme, setTheme] = useState("");
 
   return (
@@ -47,6 +48,8 @@ function App() {
           setSpriteHeight={setSpriteHeight}
           padding={padding}
           setPadding={setPadding}
+          baseSpritesheet={baseSpritesheet}
+          setBaseSpritesheet={setBaseSpritesheet}
           theme={theme}
         />
 
@@ -58,6 +61,7 @@ function App() {
           setSpritesheetURL={setSpritesheetURL}
           images={images}
           matrix={matrix}
+          baseSpritesheet={baseSpritesheet}
           theme={theme}
         />
       </div>

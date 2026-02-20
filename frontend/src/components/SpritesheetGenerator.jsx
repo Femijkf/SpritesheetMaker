@@ -12,6 +12,7 @@ const SpritesheetGenerator = ({
   setSpritesheetURL,
   images,
   matrix,
+  baseSpritesheet,
   theme
 }) => {
   const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -34,6 +35,14 @@ const SpritesheetGenerator = ({
       imageData[name] = base64;
     }
 
+    const baseSpritesheetDataUrl = baseSpritesheet
+      ? await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(baseSpritesheet);
+        })
+      : null;
+
     try {
       const response = await axios.post(`${API}/generate-spritesheet`, {
         matrix,
@@ -41,7 +50,16 @@ const SpritesheetGenerator = ({
         sprite_width: spriteWidth,
         sprite_height: spriteHeight,
         padding,
+        base_spritesheet: baseSpritesheetDataUrl,
       });
+
+      if (baseSpritesheet && !response.data.appended) {
+        console.warn(
+          "Base spritesheet was selected, but backend did not append. " +
+            "This usually means the backend server wasn't restarted / is running old code, " +
+            "or the request didn't include base_spritesheet."
+        );
+      }
 
       setSpritesheetURL(response.data.spritesheet);
     } catch (error) {
